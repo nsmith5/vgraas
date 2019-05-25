@@ -17,6 +17,7 @@ steps:
   settings:
     repo: nsmith5/vgraas
     autotag: true
+    force_tag: true
     username: nsmith5
     password:
       from_secret: docker_password
