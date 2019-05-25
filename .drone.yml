@@ -30,9 +30,10 @@ steps:
   image: nsmith5/k8s:alpine
   pull: true
   environment:
-    CONFIG:
-      from_secret: kubeconfig
+    TOKEN:
+      from_secret: kubernetes_token
+    API_SERVER:
+      from_secret: api_server
   commands:
   - "helm template chart --name staging --set namespace=staging > deploy.yaml"
-  - echo $${CONFIG} > kubeconfig
-  - kubectl --kubeconfig=kubeconfig apply -f deploy.yaml 
+  - kubectl --token=$${TOKEN} --server=$${API_SERVER} --insecure-skip-verify apply -f deploy.yaml 
