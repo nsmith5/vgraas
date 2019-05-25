@@ -33,5 +33,5 @@ steps:
       from_secret: kubeconfig
   commands:
   - "helm template chart --name staging --set namespace=staging > deploy.yaml"
-  - echo $CONFIG > kubeconfig
+  - echo $${CONFIG} > kubeconfig
   - kubectl --kubeconfig=kubeconfig apply -f deploy.yaml 
