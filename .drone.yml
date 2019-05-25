@@ -27,7 +27,7 @@ steps:
       from_secret: docker_password
 
 - name: deploy-staging
-  image: plugins/helm
+  image: quay.io/ipedrazas/drone-helm
   settings:
     chart: ./chart
     release: staging
@@ -38,7 +38,7 @@ steps:
       from_secret: kubernetes_token
 
 - name: deploy-production
-  image: plugins/helm
+  image: quay.io/ipedrazas/drone-helm
   settings:
     chart: ./chart
     release: production
