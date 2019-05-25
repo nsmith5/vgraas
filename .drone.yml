@@ -1,0 +1,22 @@
+kind: pipeline
+name: default
+steps:
+- name: unit-test
+  image: golang:1.12
+  commands:
+  # Unit tests, coverage and race condition checker
+  - go test -race -cover -covermode=atomic -coverprofile=coverage.out ./...
+- name: coverage
+  image: plugins/codecov
+  settings:
+    token: 419a9042-68d2-4efb-9dca-3778a3ad72e8
+    files:
+    - coverage.out
+- name: docker
+  image: plugins/docker
+  settings:
+    username: nsmith5
+    password:
+      repo: nsmith5/vgraas
+      from_secret: docker_password
+      autotag: true
