@@ -28,6 +28,7 @@ steps:
 
 - name: deployment
   image: nsmith5/k8s:alpine
+  pull: true
   environment:
     CONFIG:
       from_secret: kubeconfig
