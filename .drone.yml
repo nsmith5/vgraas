@@ -26,24 +26,18 @@ steps:
     password:
       from_secret: docker_password
 
+- name: helm-template
+  image: lachlanevenson/k8s-helm
+  commands:
+  - "helm template chart --name staging --set namespace=staging > deploy.yaml"
+   
 - name: deploy-staging
-  image: quay.io/ipedrazas/drone-helm
-  settings:
-    chart: ./chart
-    release: staging
-    values: namespace=staging,image.tag=latest
-    api_server:
-      from_secret: api_server
-    kubernetes_token:
-      from_secret: kubernetes_token
-
-- name: deploy-production
-  image: quay.io/ipedrazas/drone-helm
-  settings:
-    chart: ./chart
-    release: production
-    values: namespace=production,image.tag=${TAG}
-    api_server:
-      from_secret: api_server
-    kubernetes_token:
-      from_secret: kubernetes_token
+  image: bitnami/kubectl:1.14
+  environment:
+    CONFIG:
+      from_secret: kubeconfig
+  commands:
+  - mkdir -p ~/.kube/config
+  - "echo $$CONFIG > ~/.kube/config"
+  - kubectl get pods
+  - kubectl apply -f deploy.yaml
