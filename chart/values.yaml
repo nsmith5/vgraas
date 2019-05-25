@@ -1,0 +1,11 @@
+replicaCount: 3
+image:
+  tag: latest
+namespace: default
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi

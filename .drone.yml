@@ -1,0 +1,39 @@
+kind: pipeline
+name: default
+
+steps:
+- name: unit-test
+  image: golang:1.12
+  commands:
+  # Unit tests, coverage and race condition checker
+  - go test -race -cover -covermode=atomic -coverprofile=coverage.out ./...
+
+- name: coverage
+  image: plugins/codecov
+  settings:
+    token:
+      from_secret: codecov_token
+    files:
+    - coverage.out
+
+- name: docker
+  image: plugins/docker
+  settings:
+    repo: nsmith5/vgraas
+    autotag: true
+    force_tag: true
+    username: nsmith5
+    password:
+      from_secret: docker_password
+
+- name: deployment
+  image: nsmith5/k8s:alpine
+  pull: true
+  environment:
+    TOKEN:
+      from_secret: kubernetes_token
+    API_SERVER:
+      from_secret: api_server
+  commands:
+  - "helm template chart --name staging --set namespace=staging > deploy.yaml"
+  - kubectl --token=$${TOKEN} --server=$${API_SERVER} --insecure-skip-tls-verify apply -f deploy.yaml 
