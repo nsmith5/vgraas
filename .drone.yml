@@ -36,4 +36,4 @@ steps:
       from_secret: api_server
   commands:
   - "helm template chart --name staging --set namespace=staging > deploy.yaml"
-  - kubectl --token=$${TOKEN} --server=$${API_SERVER} --insecure-skip-verify apply -f deploy.yaml 
+  - kubectl --token=$${TOKEN} --server=$${API_SERVER} --insecure-skip-tls-verify apply -f deploy.yaml 
