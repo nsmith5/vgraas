@@ -15,8 +15,8 @@ steps:
 - name: docker
   image: plugins/docker
   settings:
+    repo: nsmith5/vgraas
+    autotag: true
     username: nsmith5
     password:
-      repo: nsmith5/vgraas
       from_secret: docker_password
-      autotag: true
