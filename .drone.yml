@@ -1,17 +1,21 @@
 kind: pipeline
 name: default
+
 steps:
 - name: unit-test
   image: golang:1.12
   commands:
   # Unit tests, coverage and race condition checker
   - go test -race -cover -covermode=atomic -coverprofile=coverage.out ./...
+
 - name: coverage
   image: plugins/codecov
   settings:
-    token: 419a9042-68d2-4efb-9dca-3778a3ad72e8
+    token:
+      from_secret: codecov_token
     files:
     - coverage.out
+
 - name: docker
   image: plugins/docker
   settings:
@@ -21,3 +25,25 @@ steps:
     username: nsmith5
     password:
       from_secret: docker_password
+
+- name: deploy-staging
+  image: plugins/helm
+  settings:
+    chart: ./chart
+    release: staging
+    values: namespace=staging,image.tag=latest
+    api_server:
+      from_secret: api_server
+    kubernetes_token:
+      from_secret: kubernetes_token
+
+- name: deploy-production
+  image: plugins/helm
+  settings:
+    chart: ./chart
+    release: production
+    values: namespace=production,image.tag=${TAG}
+    api_server:
+      from_secret: api_server
+    kubernetes_token:
+      from_secret: kubernetes_token
