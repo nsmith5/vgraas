@@ -81,3 +81,19 @@ func TestHealthEndpoint(t *testing.T) {
 		t.Errorf("Health endpoint didn't respond with 200")
 	}
 }
+
+func Test404Endpoint(t *testing.T) {
+	api := NewAPI(NewRAMRepo())
+	req, err := http.NewRequest("GET", "/healthz/asdf", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	rr := httptest.NewRecorder()
+	api.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusNotFound {
+		t.Errorf("Notfound endpoint didn't respond with 404")
+	}
+
+}
