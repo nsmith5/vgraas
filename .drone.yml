@@ -47,6 +47,9 @@ trigger:
   branch:
   - development
 
+depends_on:
+- test
+
 ---
 kind: pipeline
 name: production
@@ -77,3 +80,6 @@ steps:
 trigger:
   event:
   - tag
+
+depends_on:
+- test
