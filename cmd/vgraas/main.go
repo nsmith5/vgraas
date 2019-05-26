@@ -4,6 +4,7 @@ import (
 	"flag"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/nsmith5/vgraas/pkg/middleware"
 	"github.com/nsmith5/vgraas/pkg/vgraas"
@@ -25,6 +26,9 @@ func main() {
 
 		// Rate limit requests to 5Hz per remote address with bursts of 2
 		api = middleware.RateLimit(api, 5, 2, middleware.XForwardedFor)
+
+		// Logging
+		api = middleware.Logging(api, os.Stdout)
 	}
 
 	log.Println(http.ListenAndServe(*addr, api))
