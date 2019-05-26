@@ -1,0 +1,21 @@
+{{ if .Values.ingress.expose }}
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: vgraas
+  namespace: {{ .Values.namespace }}
+spec:
+  secretName: vgraas-tls
+  issuerRef:
+    name: letsencrypt
+    kind: Issuer
+  commonName: {{ .Values.ingress.host }} # Used for SAN
+  dnsNames:
+  - {{ .Values.ingress.host }}
+  acme:
+    config:
+    - http01:
+        ingress: vgraas 
+      domains:
+      - {{ .Values.ingress.host }}
+{{ end }}

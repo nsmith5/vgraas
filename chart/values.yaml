@@ -1,7 +1,10 @@
-replicaCount: 3
+replicaCount: 1
+
 image:
   tag: latest
+
 namespace: default
+
 resources:
   limits:
     cpu: 100m
@@ -9,3 +12,8 @@ resources:
   requests:
     cpu: 100m
     memory: 128Mi
+
+ingress:
+  host: example.com
+  expose: false           # If true, an ingress with TLS termination is created
+  email: bob@example.com  # Email for letsencrypt
