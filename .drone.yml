@@ -25,7 +25,7 @@ steps:
   image: plugins/docker
   settings:
     repo: nsmith5/vgraas
-    auto_tag: true
+    tag: latest
     force_tag: true
     username: nsmith5
     password:
