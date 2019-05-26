@@ -45,6 +45,7 @@ func TestCommentsAPI(t *testing.T) {
 		Request{"POST", "/reviews/0/comments", `{"author": "guy", "body": "terrible!"}`},
 		Request{"GET", "/reviews/0", ""},
 		Request{"GET", "/reviews/0/comments", ""},
+		Request{"GET", "/reviews/0/comments/0", ""},
 		Request{"PUT", "/reviews/0/comments/0", `{"author": "guy", "body": "ok!"}`},
 		Request{"DELETE", "/reviews/0/comments/0", ""},
 	}
