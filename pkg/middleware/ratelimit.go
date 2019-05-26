@@ -48,13 +48,13 @@ func RateLimit(next http.Handler, r, b, method int) http.Handler {
 					delete(visitors, ip)
 				}
 			}
+			mtx.Unlock()
 		}
 	}()
 
 	addVisitor := func(ip string) *rate.Limiter {
 		limiter := rate.NewLimiter(rate.Limit(r), b)
 		mtx.Lock()
-
 		visitors[ip] = &visitor{limiter, time.Now()}
 		mtx.Unlock()
 		return limiter
