@@ -1,0 +1,20 @@
+{{ if .Values.ingress.expose }}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: vgraas
+  namespace: {{ .Values.namespace }}
+spec:
+  tls:
+  - hosts:
+    - {{ .Values.ingress.host }}
+    secretName: vgraas-tls
+  rules:
+  - host: {{ .Values.ingress.host }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: vgraas
+          servicePort: http
+{{ end }}

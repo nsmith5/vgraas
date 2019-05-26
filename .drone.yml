@@ -1,5 +1,5 @@
 kind: pipeline
-name: default
+name: test
 
 steps:
 - name: unit-test
@@ -16,6 +16,11 @@ steps:
     files:
     - coverage.out
 
+---
+kind: pipeline
+name: staging
+
+steps:
 - name: docker
   image: plugins/docker
   settings:
@@ -36,4 +41,39 @@ steps:
       from_secret: api_server
   commands:
   - "helm template chart --name staging --set namespace=staging > deploy.yaml"
-  - kubectl --token=$${TOKEN} --server=$${API_SERVER} --insecure-skip-tls-verify apply -f deploy.yaml 
+  - kubectl --token=$${TOKEN} --server=$${API_SERVER} --insecure-skip-tls-verify apply -f deploy.yaml
+
+trigger:
+  branch:
+  - development
+
+---
+kind: pipeline
+name: production
+
+steps:
+- name: docker
+  image: plugins/docker
+  settings:
+    repo: nsmith5/vgraas
+    autotag: true
+    force_tag: true
+    username: nsmith5
+    password:
+      from_secret: docker_password
+
+- name: production deployment
+  image: nsmith5/k8s:alpine
+  pull: true
+  environment:
+    TOKEN:
+      from_secret: kubernetes_token
+    API_SERVER:
+      from_secret: api_server
+  commands:
+  - "helm template --name vgrass-prod --set namespace=production,image.tag=${TAG},ingress.expose=true,ingress.host=vgraas.nfsmith.ca,ingress.email=letsencrypt@nfsmith.ca . > prod-deploy.yaml"
+  - kubectl --token=$${TOKEN} --server=$${API_SERVER} --insecure-skip-tls-verify apply -f prod-deploy.yaml
+
+trigger:
+  event:
+  - tag
