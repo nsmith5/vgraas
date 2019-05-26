@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/nsmith5/vgraas/pkg/middleware"
 )
 
 type API struct {
@@ -58,7 +59,7 @@ func NewAPI(r Repo) http.Handler {
 	// Fall back for non-existant routers
 	a.Router.NotFoundHandler = http.HandlerFunc(NotFound)
 
-	return a
+	return middleware.ContentType(a, "application/json; charset=UTF=8")
 }
 
 func HandleError(w http.ResponseWriter, r *http.Request, status int, err string) {

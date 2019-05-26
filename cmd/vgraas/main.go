@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/nsmith5/vgraas/pkg/middleware"
 	"github.com/nsmith5/vgraas/pkg/vgraas"
 )
 
@@ -18,6 +19,12 @@ func main() {
 	{
 		repo := vgraas.NewRAMRepo()
 		api = vgraas.NewAPI(repo)
+
+		// Limit request size to 500 KiB
+		api = middleware.LimitBody(api, 1<<19)
+
+		// Rate limit requests to 5Hz per remote address with bursts of 2
+		api = middleware.RateLimit(api, 5, 2, middleware.XForwardedFor)
 	}
 
 	log.Println(http.ListenAndServe(*addr, api))
