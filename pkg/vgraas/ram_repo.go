@@ -52,6 +52,10 @@ func (rr *ramRepo) DeleteReview(id int) error {
 	rr.Lock()
 	defer rr.Unlock()
 
+	if id > len(rr.Reviews)-1 {
+		return ReviewNotFound
+	}
+
 	rr.Reviews = append(rr.Reviews[:id], rr.Reviews[id+1:]...)
 	return nil
 }
