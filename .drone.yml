@@ -25,7 +25,7 @@ steps:
   image: plugins/docker
   settings:
     repo: nsmith5/vgraas
-    autotag: true
+    auto_tag: true
     force_tag: true
     username: nsmith5
     password:
@@ -56,7 +56,7 @@ steps:
   image: plugins/docker
   settings:
     repo: nsmith5/vgraas
-    autotag: true
+    auto_tag: true
     force_tag: true
     username: nsmith5
     password:
@@ -71,7 +71,7 @@ steps:
     API_SERVER:
       from_secret: api_server
   commands:
-  - "helm template chart --name vgrass-prod --set namespace=production,image.tag=${TAG},ingress.expose=true,ingress.host=vgraas.nfsmith.ca,ingress.email=letsencrypt@nfsmith.ca > prod-deploy.yaml"
+  - helm template chart --name vgrass-prod --set namespace=production,image.tag=${TAG},ingress.expose=true,ingress.host=vgraas.nfsmith.ca,ingress.email=letsencrypt@nfsmith.ca > prod-deploy.yaml
   - kubectl --token=$${TOKEN} --server=$${API_SERVER} --insecure-skip-tls-verify apply -f prod-deploy.yaml
 
 trigger:
