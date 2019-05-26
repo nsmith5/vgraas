@@ -55,12 +55,20 @@ func NewAPI(r Repo) http.Handler {
 			Handler(route.HandlerFunc)
 	}
 
+	// Fall back for non-existant routers
+	a.Router.NotFoundHandler = http.HandlerFunc(NotFound)
+
 	return a
 }
 
 func HandleError(w http.ResponseWriter, r *http.Request, status int, err string) {
 	w.WriteHeader(status)
 	fmt.Fprintf(w, `{"err": "%s"}`, err)
+}
+
+func NotFound(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotFound)
+	fmt.Fprintf(w, `{"err": "Route '%s' does not exist"}`, r.URL.Path)
 }
 
 func (a API) ReadReviews(w http.ResponseWriter, r *http.Request) {
