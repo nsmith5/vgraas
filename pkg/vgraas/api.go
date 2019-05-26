@@ -43,6 +43,8 @@ func NewAPI(r Repo) http.Handler {
 		Route{"ReadComment", "GET", "/reviews/{rid}/comments/{id}", a.ReadComment},
 		Route{"UpdateComment", "PUT", "/reviews/{rid}/comments/{id}", a.UpdateComment},
 		Route{"DeleteComment", "DELETE", "/reviews/{rid}/comments/{id}", a.DeleteComment},
+
+		Route{"Health", "GET", "/healthz", a.Health},
 	}
 
 	for _, route := range routes {
@@ -349,4 +351,7 @@ func (a API) DeleteComment(w http.ResponseWriter, r *http.Request) {
 		HandleError(w, r, http.StatusBadRequest, err.Error())
 		return
 	}
+}
+
+func (a API) Health(w http.ResponseWriter, r *http.Request) {
 }
