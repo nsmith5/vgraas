@@ -11,6 +11,9 @@ import (
 // The code is Apache 2 licensed and can be found here:
 // https://github.com/peterbourgon/breakfast-solutions/blob/master/misc.go
 
+// interceptingWriter records the count of bytes writen to a Writer and the
+// status code. Handy for logging what happens to an http request without
+// injecting the logging code into the request handling logic.
 type interceptingWriter struct {
 	count int
 	code  int
