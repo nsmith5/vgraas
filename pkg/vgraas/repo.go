@@ -2,11 +2,15 @@ package vgraas
 
 import "errors"
 
+// These two domain specific errors should be used when
+// implementing the Repo interface.
 var (
 	ReviewNotFound  = errors.New("Review not found")
 	CommentNotFound = errors.New("Comment not found")
 )
 
+// Repo is an interface that an storage mechanism for reviews
+// should obey.
 type Repo interface {
 	// All Reviews
 	ReadReviews() ([]Review, error)

@@ -31,7 +31,11 @@ const (
 	RemoteAddr
 )
 
+// RateLimit is a middleware that implements rate limiting based on
+// IP address.
 //
+// It uses token-bucket algorithm with 'r' as rate and 'b' as burst.
+// 'method' is used to specify the method for collecting the IP address.
 func RateLimit(next http.Handler, r, b, method int) http.Handler {
 	var visitors = make(map[string]*visitor)
 	var mtx sync.Mutex

@@ -9,6 +9,7 @@ import (
 	"github.com/nsmith5/vgraas/pkg/middleware"
 )
 
+// API implements the OpenAPI specification of vgraas.
 type API struct {
 	Repo
 	*mux.Router
@@ -21,6 +22,8 @@ type Route struct {
 	HandlerFunc http.HandlerFunc
 }
 
+// NewAPI returns an http.Handler that implements
+// the OpenAPI specification for vgraas.
 func NewAPI(r Repo) http.Handler {
 	var a API
 	a.Repo = r
@@ -62,16 +65,20 @@ func NewAPI(r Repo) http.Handler {
 	return middleware.ContentType(a, "application/json; charset=UTF=8")
 }
 
+// HandleError sets the status code and writes a JSON object with
+// error message for requests that have fallen on troubled times.
 func HandleError(w http.ResponseWriter, r *http.Request, status int, err string) {
 	w.WriteHeader(status)
 	fmt.Fprintf(w, `{"err": "%s"}`, err)
 }
 
+// NotFound is a handy request handler for routes that don't exist.
 func NotFound(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotFound)
 	fmt.Fprintf(w, `{"err": "Route '%s' does not exist"}`, r.URL.Path)
 }
 
+// ReadReviews implements GET /reviews/
 func (a API) ReadReviews(w http.ResponseWriter, r *http.Request) {
 	reviews, err := a.Repo.ReadReviews()
 	if err != nil {
@@ -87,6 +94,7 @@ func (a API) ReadReviews(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// CreateReview implements POST /reviews/
 func (a API) CreateReview(w http.ResponseWriter, r *http.Request) {
 	var review Review
 	{
@@ -112,6 +120,7 @@ func (a API) CreateReview(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// ReadReview implements GET /reviews/{id}
 func (a API) ReadReview(w http.ResponseWriter, r *http.Request) {
 	var id int
 	{
@@ -139,6 +148,7 @@ func (a API) ReadReview(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// UpdateReview implements PUT /reviews/{id}
 func (a API) UpdateReview(w http.ResponseWriter, r *http.Request) {
 	var id int
 	{
@@ -172,6 +182,7 @@ func (a API) UpdateReview(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// DeleteReview implements DELETE /reviews/{id}
 func (a API) DeleteReview(w http.ResponseWriter, r *http.Request) {
 	var id int
 	{
@@ -194,6 +205,7 @@ func (a API) DeleteReview(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// ReadComments implements GET /reviews/{rid}/comments
 func (a API) ReadComments(w http.ResponseWriter, r *http.Request) {
 	var id int
 	{
@@ -224,6 +236,7 @@ func (a API) ReadComments(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// CreateComment implements POST /reviews/{rid}/comments
 func (a API) CreateComment(w http.ResponseWriter, r *http.Request) {
 	var rid int
 	{
@@ -259,6 +272,7 @@ func (a API) CreateComment(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// ReadComment implements GET /reviews/{rid}/comments/{id}
 func (a API) ReadComment(w http.ResponseWriter, r *http.Request) {
 	var rid, id int
 	{
@@ -295,6 +309,7 @@ func (a API) ReadComment(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// UpdateComment implements PUT /reviews/{rid}/comments/{id}
 func (a API) UpdateComment(w http.ResponseWriter, r *http.Request) {
 	var rid, id int
 	{
@@ -334,6 +349,7 @@ func (a API) UpdateComment(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// DeleteComment implements DELETE /reviews/{rid}/comments/{id}
 func (a API) DeleteComment(w http.ResponseWriter, r *http.Request) {
 	var rid, id int
 	{
@@ -362,5 +378,10 @@ func (a API) DeleteComment(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Health implements a health monitoring endpoint at /healthz.
+//
+// Pop-quiz: Why is that 'z' always there? Good question. Anyways
+// this endpoint is great for Kubernetes because you can use
+// it for liveness and readiness probes.
 func (a API) Health(w http.ResponseWriter, r *http.Request) {
 }

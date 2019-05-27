@@ -3,17 +3,18 @@ package vgraas
 import "sync"
 
 type ramRepo struct {
-	sync.Mutex
+	sync.RWMutex
 	Reviews []Review
 }
 
+// NewRAMRepo returns an in-memory implementation of a Repo.
 func NewRAMRepo() Repo {
 	return &ramRepo{}
 }
 
 func (rr *ramRepo) ReadReviews() ([]Review, error) {
-	rr.Lock()
-	defer rr.Unlock()
+	rr.RLock()
+	defer rr.RUnlock()
 	return rr.Reviews, nil
 }
 
@@ -28,8 +29,8 @@ func (rr *ramRepo) CreateReview(r Review) (id int, err error) {
 }
 
 func (rr *ramRepo) ReadReview(id int) (Review, error) {
-	rr.Lock()
-	defer rr.Unlock()
+	rr.RLock()
+	defer rr.RUnlock()
 
 	if id > len(rr.Reviews)-1 {
 		return Review{}, ReviewNotFound
@@ -61,8 +62,8 @@ func (rr *ramRepo) DeleteReview(id int) error {
 }
 
 func (rr *ramRepo) ReadComments(reviewID int) ([]Comment, error) {
-	rr.Lock()
-	defer rr.Unlock()
+	rr.RLock()
+	defer rr.RUnlock()
 
 	if reviewID > len(rr.Reviews)-1 {
 		return nil, ReviewNotFound
@@ -84,8 +85,8 @@ func (rr *ramRepo) CreateComment(reviewID int, c Comment) (id int, err error) {
 }
 
 func (rr *ramRepo) ReadComment(reviewID, id int) (Comment, error) {
-	rr.Lock()
-	defer rr.Unlock()
+	rr.RLock()
+	defer rr.RUnlock()
 
 	if reviewID > len(rr.Reviews)-1 {
 		return Comment{}, ReviewNotFound
