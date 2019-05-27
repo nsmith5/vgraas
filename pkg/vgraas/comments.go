@@ -1,6 +1,6 @@
 package vgraas
 
 type Comment struct {
-	Body   string
-	Author string
+	Body   string `json:"body"`
+	Author string `json:"author"`
 }
