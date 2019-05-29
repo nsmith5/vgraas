@@ -1,6 +1,6 @@
 # VGRaaS - Video Game Reviews as a Service
 
-[![Build Status](https://cloud.drone.io/api/badges/nsmith5/vgraas/status.svg?ref=/refs/heads/development)](https://cloud.drone.io/nsmith5/vgraas) [![Code Coverage](https://codecov.io/gh/nsmith5/vgraas/branch/development/graph/badge.svg)](https://codecov.io/gh/nsmith5/vgraas) [![Documentation](https://godoc.org/github.com/nsmith5/vgraas/pkg/vgraas?status.svg)](https://godoc.org/github.com/nsmith5/vgraas/pkg/vgraas)
+[![Build Status](https://cloud.drone.io/api/badges/nsmith5/vgraas/status.svg?branch=development)](https://cloud.drone.io/nsmith5/vgraas) [![Code Coverage](https://codecov.io/gh/nsmith5/vgraas/branch/development/graph/badge.svg)](https://codecov.io/gh/nsmith5/vgraas) [![Documentation](https://godoc.org/github.com/nsmith5/vgraas/pkg/vgraas?status.svg)](https://godoc.org/github.com/nsmith5/vgraas/pkg/vgraas)
 
 
 Thats right, video game reviews as a service. When you're making a top quality
