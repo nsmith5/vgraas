@@ -1,3 +1,10 @@
+**Um what?**
+
+*this was a technical challenge as part of hiring process. The content
+is only semi-serious and the API at vgraas.nfsmith.ca is now
+decomissioned. Feel free to look around and steal ideas, but keep in
+mind this was just a toy project*
+
 # VGRaaS - Video Game Reviews as a Service
 
 [![Build Status](https://cloud.drone.io/api/badges/nsmith5/vgraas/status.svg?branch=development)](https://cloud.drone.io/nsmith5/vgraas) [![Code Coverage](https://codecov.io/gh/nsmith5/vgraas/branch/development/graph/badge.svg)](https://codecov.io/gh/nsmith5/vgraas) [![Documentation](https://godoc.org/github.com/nsmith5/vgraas/pkg/vgraas?status.svg)](https://godoc.org/github.com/nsmith5/vgraas/pkg/vgraas)
